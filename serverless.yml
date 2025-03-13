@@ -6,7 +6,7 @@ service: dronofy-fc
 stages:
   default:
     params:
-      tableName: "distributionCenter-table-${sls:stage}"
+      tableName: "DistributionCenterTable"
 
 provider:
   name: aws
@@ -29,16 +29,16 @@ provider:
 
 functions:
   createDistributionCenter:
-    handler: src/handlers/distributionCenterHandler.create
+    handler: src/handlers/distributionCenterHandler.handler
     events:
       - http:
           path: distribution-centers
-          method: post
+          method: get
           cors: true
 
 resources:
   Resources:
-    UsersTable:
+    DistributionCenterTable:
       Type: AWS::DynamoDB::Table
       Properties:
         AttributeDefinitions:
@@ -48,4 +48,4 @@ resources:
           - AttributeName: distributionCenterId
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
-        TableName: ${param:tableName}
+        TableName: DistributionCenterTable
