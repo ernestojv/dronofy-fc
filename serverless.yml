@@ -70,6 +70,29 @@ functions:
           method: get
           cors: true
 
+  #Suplier
+  createSuplier:
+    handler: src/handlers/suplierHandler.create
+    events:
+      - http:
+          path: suplier
+          method: post
+          cors: true
+  getSuplierById:
+    handler: src/handlers/suplierHandler.getById
+    events:
+      - http:
+          path: suplier/{id}
+          method: get
+          cors: true
+  getSupliers:
+    handler: src/handlers/suplierHandler.getAll
+    events:
+      - http:
+          path: suplier
+          method: get
+          cors: true
+
 resources:
   Resources:
     DistributionCenterTable:
