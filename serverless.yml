@@ -32,8 +32,22 @@ functions:
     handler: src/handlers/distributionCenterHandler.create
     events:
       - http:
-          path: distribution-centers
+          path: distribution-center
           method: post
+          cors: true
+  getDistributionCenterById:
+    handler: src/handlers/distributionCenterHandler.getById
+    events:
+      - http:
+          path: distribution-center/{id}
+          method: get
+          cors: true
+  getDistributionCenters:
+    handler: src/handlers/distributionCenterHandler.getAll
+    events:
+      - http:
+          path: distribution-center
+          method: get
           cors: true
 
 resources:
