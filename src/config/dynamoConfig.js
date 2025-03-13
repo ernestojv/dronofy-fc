@@ -1,14 +1,6 @@
-const AWS = require('aws-sdk');
+const AWS = require("aws-sdk");
 
-const dynamoDbConfig = {
-  region: process.env.AWS_REGION || 'us-east-1',
-  apiVersion: '2012-08-10'
-};
+const dynamoDB = new AWS.DynamoDB.DocumentClient();
 
-AWS.config.update({
-  region: dynamoDbConfig.region,
-});
+module.exports = dynamoDB;
 
-const dynamoDb = new AWS.DynamoDB.DocumentClient();
-
-module.exports = { dynamoDb };

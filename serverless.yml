@@ -29,11 +29,11 @@ provider:
 
 functions:
   createDistributionCenter:
-    handler: src/handlers/distributionCenterHandler.handler
+    handler: src/handlers/distributionCenterHandler.create
     events:
       - http:
           path: distribution-centers
-          method: get
+          method: post
           cors: true
 
 resources:
