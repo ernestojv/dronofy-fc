@@ -70,26 +70,26 @@ functions:
           method: get
           cors: true
 
-  #Suplier
-  createSuplier:
-    handler: src/handlers/suplierHandler.create
+  #Supplier
+  createSupplier:
+    handler: src/handlers/supplierHandler.create
     events:
       - http:
-          path: suplier
+          path: supplier
           method: post
           cors: true
-  getSuplierById:
-    handler: src/handlers/suplierHandler.getById
+  getSupplierById:
+    handler: src/handlers/supplierHandler.getById
     events:
       - http:
-          path: suplier/{id}
+          path: supplier/{id}
           method: get
           cors: true
-  getSupliers:
-    handler: src/handlers/suplierHandler.getAll
+  getSuppliers:
+    handler: src/handlers/supplierHandler.getAll
     events:
       - http:
-          path: suplier
+          path: supplier
           method: get
           cors: true
 
