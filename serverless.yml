@@ -3,11 +3,6 @@ org: ernestojv
 # "service" is the name of this project. This will also be added to your AWS resource names.
 service: dronofy-fc
 
-stages:
-  default:
-    params:
-      tableName: "DistributionCenterTable"
-
 provider:
   name: aws
   runtime: nodejs20.x
@@ -24,10 +19,13 @@ provider:
             - dynamodb:DeleteItem
           Resource:
             - Fn::GetAtt: [DistributionCenterTable, Arn]
+            - Fn::GetAtt: [ProductTable, Arn]
   environment:
-    DISTRIBUTIONCENTER_TABLE: ${param:tableName}
+    DISTRIBUTIONCENTER_TABLE: DistributionCenterTable
+    PRODUCT_TABLE: ProductTable
 
 functions:
+  #Distribution Center
   createDistributionCenter:
     handler: src/handlers/distributionCenterHandler.create
     events:
@@ -49,6 +47,28 @@ functions:
           path: distribution-center
           method: get
           cors: true
+  #Product
+  createProduct:
+    handler: src/handlers/productHandler.create
+    events:
+      - http:
+          path: product
+          method: post
+          cors: true
+  getProductById:
+    handler: src/handlers/productHandler.getById
+    events:
+      - http:
+          path: product/{id}
+          method: get
+          cors: true
+  getProducts:
+    handler: src/handlers/productHandler.getAll
+    events:
+      - http:
+          path: product
+          method: get
+          cors: true
 
 resources:
   Resources:
@@ -63,3 +83,14 @@ resources:
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
         TableName: DistributionCenterTable
+    ProductTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: productId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: productId
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: ProductTable
