@@ -7,8 +7,7 @@ const createSupplier = async (data) => {
         name: data.name,
         email: data.email,
         phone: data.phone,
-        longitude: data.longitude,
-        latitude: data.latitude,
+        location: data.location,
         createdAt: new Date().toISOString(),
     };
     return await create(supplier);

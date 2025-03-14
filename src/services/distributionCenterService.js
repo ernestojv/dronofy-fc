@@ -5,8 +5,7 @@ const createDistributionCenter = async (data) => {
     const distributionCenter = {
         distributionCenterId: uuidv4(), // Genera un ID único
         name: data.name,
-        longitude: data.longitude,
-        latitude: data.latitude,
+        location: data.location,
         createdAt: new Date().toISOString(),
     };
     return await create(distributionCenter);
