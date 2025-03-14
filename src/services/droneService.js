@@ -1,7 +1,11 @@
 const { v4: uuidv4 } = require('uuid');
 const { create, getById, getAll } = require('../repositories/droneRepository');
-
+const { getDistributionCenterById } = require('../services/distributionCenterService')
 const createDrone = async (data) => {
+    const distributionCenter = await getDistributionCenterById(data.lastDistributionCenterId);
+    if (!distributionCenter) {
+        throw new Error('Distribution Center not found');
+    }
     const drone = {
         droneId: uuidv4(),
         model: data.model,

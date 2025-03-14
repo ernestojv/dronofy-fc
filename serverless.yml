@@ -22,12 +22,13 @@ provider:
             - Fn::GetAtt: [ProductTable, Arn]
             - Fn::GetAtt: [SupplierTable, Arn]
             - Fn::GetAtt: [DroneTable, Arn]
+            - Fn::GetAtt: [PurchaseOrderTable, Arn]
   environment:
     DISTRIBUTIONCENTER_TABLE: DistributionCenterTable
     PRODUCT_TABLE: ProductTable
     SUPPLIER_TABLE: SupplierTable
     DRONE_TABLE: DroneTable
-
+    PURCHASEORDER_TABLE: PurchaseOrderTable
 functions:
   #Distribution Center
   createDistributionCenter:
@@ -118,7 +119,29 @@ functions:
           path: drone
           method: get
           cors: true
-
+  #Purchase Order
+  createPurchaseOrder:
+    handler: src/handlers/purchaseOrderHandler.create
+    events:
+      - http:
+          path: purchase-order
+          method: post
+          cors: true
+  getPurchaseOrderById:
+    handler: src/handlers/purchaseOrderHandler.getById
+    events:
+      - http:
+          path: purchase-order/{id}
+          method: get
+          cors: true
+  getPurchaseOrders:
+    handler: src/handlers/purchaseOrderHandler.getAll
+    events:
+      - http:
+          path: purchase-order
+          method: get
+          cors: true
+#DynamoDB Tables
 resources:
   Resources:
     DistributionCenterTable:
@@ -165,3 +188,14 @@ resources:
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
         TableName: DroneTable
+    PurchaseOrderTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: purchaseOrderId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: purchaseOrderId
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: PurchaseOrderTable
