@@ -24,6 +24,10 @@ const getDroneById = async (droneId) => {
     return await getById(droneId);
 }
 
+const getDronesInDistributionCenter = async (distributionCenterId) => {
+    return await getAll().filter(drone => drone.lastDistributionCenterId === distributionCenterId && drone.status === 'available');
+}
+
 const getAllDrones = async () => {
     return await getAll();
 }
@@ -31,5 +35,6 @@ const getAllDrones = async () => {
 module.exports = {
     createDrone,
     getDroneById,
+    getDronesInDistributionCenter,
     getAllDrones,
 };

@@ -1,4 +1,4 @@
-const { createDistributionCenter, getDistributionCenterById, getAllDistributionCenters } = require("../services/distributionCenterService");
+const { createDistributionCenter, getDistributionCenterById, getNearbyDistributionCenters, getAllDistributionCenters } = require("../services/distributionCenterService");
 
 const create = async (event) => {
   try {
@@ -44,6 +44,23 @@ const getById = async (event) => {
   }
 };
 
+const getNearby = async (event) => {
+  try {
+    const { longitude, latitude, range } = event.queryStringParameters;
+    const location = { longitude: parseFloat(longitude), latitude: parseFloat(latitude) };
+    const nearbyDistributionCenters = await getNearbyDistributionCenters(location, parseFloat(range));
+    return {
+      statusCode: 200,
+      body: JSON.stringify(nearbyDistributionCenters),
+    };
+  } catch (error) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: error.message }),
+    };
+  }
+}
+
 const getAll = async (event) => {
   try {
     const distributionCenters = await getAllDistributionCenters();
@@ -63,5 +80,6 @@ const getAll = async (event) => {
 module.exports = {
   create,
   getById,
+  getNearby,
   getAll,
 };

@@ -23,12 +23,14 @@ provider:
             - Fn::GetAtt: [SupplierTable, Arn]
             - Fn::GetAtt: [DroneTable, Arn]
             - Fn::GetAtt: [PurchaseOrderTable, Arn]
+            - Fn::GetAtt: [PickupOrderTable, Arn]
   environment:
     DISTRIBUTIONCENTER_TABLE: DistributionCenterTable
     PRODUCT_TABLE: ProductTable
     SUPPLIER_TABLE: SupplierTable
     DRONE_TABLE: DroneTable
     PURCHASEORDER_TABLE: PurchaseOrderTable
+    PICKUPORDER_TABLE: PickupOrderTable
 functions:
   #Distribution Center
   createDistributionCenter:
@@ -37,6 +39,13 @@ functions:
       - http:
           path: distribution-center
           method: post
+          cors: true
+  getNearbyDistributionCenters:
+    handler: src/handlers/distributionCenterHandler.getNearby
+    events:
+      - http:
+          path: distribution-center/nearby
+          method: get
           cors: true
   getDistributionCenterById:
     handler: src/handlers/distributionCenterHandler.getById
@@ -141,6 +150,29 @@ functions:
           path: purchase-order
           method: get
           cors: true
+  #Pickup Order
+  createPickupOrder:
+    handler: src/handlers/pickupOrderHandler.create
+    events:
+      - http:
+          path: pickup-order
+          method: post
+          cors: true
+  getPickupOrderById:
+    handler: src/handlers/pickupOrderHandler.getById
+    events:
+      - http:
+          path: pickup-order/{id}
+          method: get
+          cors: true
+  getPickupOrders:
+    handler: src/handlers/pickupOrderHandler.getAll
+    events:
+      - http:
+          path: pickup-order
+          method: get
+          cors: true
+
 #DynamoDB Tables
 resources:
   Resources:
@@ -199,3 +231,14 @@ resources:
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
         TableName: PurchaseOrderTable
+    PickupOrderTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: pickupOrderId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pickupOrderId
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TableName: PickupOrderTable
